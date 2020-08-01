@@ -1,14 +1,15 @@
 import React, { createContext, useReducer } from "react";
 import AppReducer from "./AppReducer";
+import axios from "axios";
 import { groupBy } from "../utils/utils";
 
 export class Expense {
-  constructor(id, name, quantity, price, date) {
-    this.id = id || null;
-    this.name = name;
-    this.quantity = quantity;
-    this.price = price;
-    this.date = date;
+  constructor(expense) {
+    this._id = expense._id || null;
+    this.name = expense.name;
+    this.quantity = expense.quantity;
+    this.price = expense.price;
+    this.date = expense.date.split("T")[0];
   }
 
   get total() {
@@ -33,23 +34,15 @@ const initialState = {
     price: 0,
   },
   expenses: [],
-  inventoryList: [
-    {
-      id: 1,
-      name: "mop",
-      quantity: 20,
-    },
-    {
-      id: 2,
-      name: "Broom",
-      quantity: 30,
-    },
-    {
-      id: 3,
-      name: "Harpic",
-      quantity: 10,
-    },
-  ],
+  inventoryList: [],
+};
+
+const expenseUrl = "/api/v1/expenses";
+const inventoryUrl = "/api/v1/inventory";
+const config = {
+  headers: {
+    "Content-Type": "application/json",
+  },
 };
 
 // Create context
@@ -80,11 +73,60 @@ export const GlobalProvider = ({ children }) => {
 
   // Inventory Item actions
 
-  function getInventoryList() {
-    dispatch({
-      type: "GET_INVENTORY_LIST",
-      payload: state.inventoryList,
-    });
+  async function getInventoryList() {
+    try {
+      const res = await axios.get(`${inventoryUrl}`);
+
+      const payload = res.data.data;
+
+      dispatch({
+        type: "GET_INVENTORY_LIST",
+        payload,
+      });
+    } catch (error) {
+      dispatch({
+        type: "INVENTORY_ERROR",
+        payload: error.message,
+      });
+    }
+  }
+
+  async function saveEditItem(editItem) {
+    console.log("saveEditItem called with: ", editItem);
+    if (editItem._id) {
+      try {
+        await axios.put(`${inventoryUrl}/${editItem._id}`, editItem);
+      } catch (error) {
+        dispatch({
+          type: "INVENTORY_ERROR",
+          payload: error.message,
+        });
+      }
+    } else {
+      try {
+        await axios.post(`${inventoryUrl}`, editItem, config);
+      } catch (error) {
+        dispatch({
+          type: "INVENTORY_ERROR",
+          payload: error.message,
+        });
+      }
+    }
+    getInventoryList();
+  }
+
+  async function deleteInventoryItem(id) {
+    try {
+      await axios.delete(`${inventoryUrl}/${id}`);
+
+      getInventoryList();
+    } catch (error) {
+      dispatch({
+        type: "INVENTORY_ERROR",
+        payload: error.message,
+      });
+    }
+    setModalOpen(false);
   }
 
   function editItem(payload) {
@@ -93,29 +135,6 @@ export const GlobalProvider = ({ children }) => {
       payload,
     });
     setModalOpen(true);
-  }
-
-  function saveEditItem(editItem) {
-    console.log("saveEditItem called with: ", editItem);
-    if (editItem.id) {
-      const payload = state.inventoryList.map((item) => {
-        const oldItem = state.inventoryList.find(
-          ({ id }) => id === editItem.id
-        );
-        return oldItem ? editItem : item;
-      });
-
-      dispatch({
-        type: "SAVE_EDIT_ITEM",
-        payload,
-      });
-    } else {
-      const payload = [...state.inventoryList, { ...editItem, id: 100 }];
-      dispatch({
-        type: "SAVE_NEW_ITEM",
-        payload,
-      });
-    }
   }
 
   function setInventoryName(payload) {
@@ -131,25 +150,57 @@ export const GlobalProvider = ({ children }) => {
     });
   }
 
-  function deleteInventoryItem(id) {
-    const payload = state.inventoryList.filter((item) => item.id !== id);
-    dispatch({
-      type: "DELETE_INVENTORY_ITEM",
-      payload,
-    });
-    setModalOpen(false);
+  // Expense Item actions
+  async function getExpenses() {
+    try {
+      const res = await axios.get(`${expenseUrl}`);
+
+      const data = res.data.data;
+
+      const payload = data.map((expense) => new Expense(expense));
+
+      console.log("expenses GS", payload);
+
+      dispatch({
+        type: "GET_EXPENSES",
+        payload,
+      });
+    } catch (error) {
+      dispatch({
+        type: "EXPENSES_ERROR",
+        payload: error.message,
+      });
+    }
   }
 
-  // Expense Item actions
-  function getExpenses() {
-    const payload = state.expenses.map(
-      (expense) => new Expense(...Object.values(expense))
-    );
-    console.log("payload", payload);
-    dispatch({
-      type: "GET_EXPENSES",
-      payload,
-    });
+  async function saveEditExpenseItem(editItem) {
+    try {
+      if (editItem._id) {
+        await axios.put(`${expenseUrl}/${editItem._id}`, editItem);
+      } else {
+        await axios.post(`${expenseUrl}`, editItem, config);
+      }
+      getExpenses();
+    } catch (error) {
+      dispatch({
+        type: "EXPENSES_ERROR",
+        payload: error.message,
+      });
+    }
+    getExpenses();
+  }
+
+  async function deleteExpenseItem(id) {
+    try {
+      await axios.delete(`${expenseUrl}/${id}`);
+    } catch (error) {
+      dispatch({
+        type: "EXPENSES_ERROR",
+        payload: error.message,
+      });
+    }
+    setModalOpen(false);
+    getExpenses();
   }
 
   function editExpenseItem(payload) {
@@ -158,33 +209,6 @@ export const GlobalProvider = ({ children }) => {
       payload,
     });
     setModalOpen(true);
-  }
-
-  function saveEditExpenseItem(editItem) {
-    if (editItem.id) {
-      const payload = state.inventoryList.map((item) => {
-        const oldItem = state.inventoryList.find(
-          ({ id }) => id === editItem.id
-        );
-        return oldItem ? editItem : item;
-      });
-
-      dispatch({
-        type: "SAVE_EDIT_EXPENSE_ITEM",
-        payload,
-      });
-    } else {
-      console.log("saveEdit", editItem);
-      const newItem = new Expense(...Object.values(editItem));
-      console.log("new Item", newItem);
-      newItem.id = 100;
-      const payload = [...state.expenses, newItem];
-
-      dispatch({
-        type: "SAVE_NEW_EXPENSE_ITEM",
-        payload,
-      });
-    }
   }
 
   function setExpenseName(name) {
@@ -208,21 +232,12 @@ export const GlobalProvider = ({ children }) => {
     });
   }
   function setExpenseDate(value) {
-    const date = new Date(value).toLocaleDateString();
+    const date = new Date(value).toISOString().split("T")[0];
     console.log("date", date);
     dispatch({
       type: "SET_EXPENSE_ITEM",
       payload: { ...state.expenseItem, date },
     });
-  }
-
-  function deleteExpenseItem(id) {
-    const payload = state.inventoryList.filter((item) => item.id !== id);
-    dispatch({
-      type: "DELETE_EXPENSE_ITEM",
-      payload,
-    });
-    setModalOpen(false);
   }
 
   return (
@@ -234,7 +249,6 @@ export const GlobalProvider = ({ children }) => {
         error: state.error,
         inventoryItem: state.inventoryItem,
         expenseItem: state.expenseItem,
-
         setModalOpen,
         // Inventory action
         getInventoryList,

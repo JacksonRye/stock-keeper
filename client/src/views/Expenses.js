@@ -31,7 +31,7 @@ const Expenses = () => {
 
   console.log("expenses", expenses);
 
-  const { name, quantity, price, id, date } = expenseItem;
+  const { name, quantity, price, _id, date } = expenseItem;
 
   const total = expenses.reduce((sum, { total }) => sum + total, 0);
 
@@ -47,7 +47,7 @@ const Expenses = () => {
         <Modal onSave={() => saveEditExpenseItem(expenseItem)}>
           <div className="head">
             <i
-              onClick={() => deleteExpenseItem(id)}
+              onClick={() => deleteExpenseItem(_id)}
               className="far fa-trash-alt"
             ></i>
             <h2>Add / Edit Expense</h2>

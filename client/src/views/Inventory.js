@@ -18,7 +18,7 @@ const Inventory = () => {
     getInventoryList,
   } = useContext(GlobalContext);
 
-  const { name, quantity, id } = inventoryItem;
+  const { name, quantity, _id } = inventoryItem;
 
   useEffect(() => {
     getInventoryList();
@@ -36,7 +36,7 @@ const Inventory = () => {
         <Modal onSave={() => saveEditItem(inventoryItem)}>
           <div className="head">
             <i
-              onClick={() => deleteInventoryItem(id)}
+              onClick={() => deleteInventoryItem(_id)}
               className="far fa-trash-alt"
             ></i>
             <h2>Add / Edit Item</h2>
