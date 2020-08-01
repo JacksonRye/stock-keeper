@@ -1,0 +1,17 @@
+.ExpenseGroup {
+    h3 {
+        margin-left: 1rem;
+        margin-top: 2rem;
+    }
+    
+}
+
+.ExpenseItem {
+
+    .content {
+
+        text-transform: capitalize;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+    }
+}

@@ -1,0 +1,32 @@
+.Header {
+  background: url("../hero.svg") center/cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 40vh;
+
+  header {
+    height: 10vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    #menu {
+      height: 60%;
+    }
+
+    & > div {
+      margin: 0rem 0.8rem;
+    }
+  }
+
+  .content {
+    //   position: relative;
+    //   bottom: 30%;
+      margin: 0 0.8rem 3rem;
+      color: #fff;
+
+      p {
+          margin: 1rem 0;
+      }
+  }
+}

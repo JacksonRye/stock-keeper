@@ -1,0 +1,51 @@
+@import "config";
+@import "Header";
+@import "Body";
+@import "InventoryItem";
+@import "Menu";
+@import "Modal";
+@import "Expenses";
+@import "AboutView";
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+
+body {
+  background: #eceaea;
+  height: 100vh;
+  width: 100vw;
+}
+
+img {
+  width: 100%;
+}
+
+.card {
+  background: #fff;
+  padding: 1rem 0.5rem;
+  margin: 0 0.8rem 0.5rem;
+  border-radius: 8px;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.blur {
+  // filter: blur(1px);
+}
+
+.dark-background {
+  height: 100vh;
+  width: 100vw;
+  background: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
+  z-index: 10;
+}
+
+.App {
+}

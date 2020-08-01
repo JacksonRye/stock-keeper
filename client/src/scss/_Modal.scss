@@ -1,0 +1,141 @@
+.Modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  margin: 0 auto;
+  z-index: 10;
+
+  .head {
+    i {
+      color: #fff;
+      background: red;
+      padding: 0.4rem;
+    }
+  }
+
+  h2 {
+    text-align: center;
+    padding-bottom: 2rem;
+  }
+
+  .group {
+    position: relative;
+    margin-bottom: 2rem;
+    // background: black;
+  }
+
+  input {
+    font-size: 1.4rem;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 95%;
+    border: none;
+    border-bottom: 1px solid #757575;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  label {
+    color: #999;
+    font-size: 1.3rem;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 0.2s ease all;
+  }
+
+  // active state
+  input:focus ~ label,
+  input:valid ~ label {
+    top: -20px;
+    font-size: 0.8rem;
+    color: darken($primary-color, 2);
+  }
+
+  // bottom bars
+  .bar {
+    position: relative;
+    display: block;
+    width: 95%;
+
+    &::before,
+    &::after {
+      content: "";
+      height: 2px;
+      width: 0;
+      bottom: 1px;
+      position: absolute;
+      background: darken($primary-color, 2);
+      transition: 0.2s ease all;
+    }
+
+    &::before {
+      left: 50%;
+    }
+
+    &::after {
+      right: 50%;
+    }
+  }
+
+  // active state
+  input:focus ~ .bar::before,
+  input:focus ~ .bar::after {
+    width: 50%;
+  }
+
+  //   highlighter
+  .highlight {
+    position: absolute;
+    height: 60%;
+    width: 80%;
+    top: 18px;
+    left: 0;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  //   active state
+  input:focus ~ .highlight {
+    animation: inputHighlighter 0.3s ease;
+  }
+
+  //   animations
+  @keyframes inputHighlighter {
+    from {
+      background: darken($primary-color, 10);
+    }
+    to {
+      width: 0;
+      background: transparent;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+
+    & > button {
+      padding: 1rem 0;
+      appearance: none;
+      border: none;
+      margin-bottom: 0.3rem;
+      color: #fff;
+      border-radius: 8px;
+    }
+
+    .save {
+      background: #00d8bd;
+    }
+
+    .cancel {
+      background: #e8052e;
+    }
+  }
+}

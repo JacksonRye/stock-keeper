@@ -1,0 +1,45 @@
+.AboutView {
+  background: url(../about.svg) center/cover;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .menu-container {
+      margin-top: 1rem;
+    width: 12%;
+    align-self: flex-end;
+    // position: fixed;
+    // right: 0;
+    // margin: 0rem 0.5rem 1rem;
+  }
+
+  img {
+      transform: scale(0.7) translateY(-40%);
+    //   transform: translateY(10%);
+  }
+
+
+  p {
+      color: white;
+      text-align: center;
+  }
+
+  .info > p {
+    font-size: 2rem;
+    color: rgb(0, 0, 0);
+  }
+
+  .info {
+      padding-bottom: 2rem;
+  }
+
+  .contact > p {
+      color: rgb(0, 0, 0);
+  }
+
+  .contact {
+      padding-bottom: 2rem;
+  }
+}
