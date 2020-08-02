@@ -13,7 +13,6 @@
   box-sizing: border-box;
 }
 
-
 body {
   background: #eceaea;
   height: 100vh;
@@ -48,4 +47,37 @@ img {
 }
 
 .App {
+}
+
+.LocationGroup {
+  .location {
+    margin: 1rem 0 1rem 1rem;
+  }
+
+  li {
+    list-style: none;
+  }
+}
+
+.modal-location {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  p {
+    // margin-right: 4rem;
+  }
+
+  select {
+    width: 70%;
+    margin: 0 auto 0;
+  }
+}
+
+a {
+  border: #fff 2px solid;
+  padding: 1rem;
+  text-decoration: none;
+  color: #fff;
+  background-color: darken($primary-color, $amount: 2);
+  font-weight: 700;
 }

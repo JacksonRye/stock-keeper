@@ -10,6 +10,10 @@ const InventorySchema = new mongoose.Schema({
     type: Number,
     required: [true, "Please enter how many"],
   },
+  location: {
+    type: String,
+    required: [true, "Please enter location"]
+  }
 });
 
 module.exports = mongoose.model("Inventory", InventorySchema);

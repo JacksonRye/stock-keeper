@@ -10,6 +10,7 @@ export class Expense {
     this.quantity = expense.quantity;
     this.price = expense.price;
     this.date = expense.date.split("T")[0];
+    this.location = expense.location;
   }
 
   get total() {
@@ -26,15 +27,18 @@ const initialState = {
     id: null,
     name: "",
     quantity: 0,
+    location: "",
   },
   expenseItem: {
     id: null,
     name: "",
     quantity: 0,
     price: 0,
+    location: "",
   },
   expenses: [],
   inventoryList: [],
+  locations: ["Ajip", "Rumokoro"],
 };
 
 const expenseUrl = "/api/v1/expenses";
@@ -149,6 +153,12 @@ export const GlobalProvider = ({ children }) => {
       payload: { ...state.inventoryItem, quantity: payload },
     });
   }
+  function setInventoryLocation(payload) {
+    dispatch({
+      type: "SET_INVENTORY_ITEM",
+      payload: { ...state.inventoryItem, location: payload },
+    });
+  }
 
   // Expense Item actions
   async function getExpenses() {
@@ -231,6 +241,12 @@ export const GlobalProvider = ({ children }) => {
       payload: { ...state.expenseItem, price },
     });
   }
+  function setExpenseLocation(location) {
+    dispatch({
+      type: "SET_EXPENSE_ITEM",
+      payload: { ...state.expenseItem, location },
+    });
+  }
   function setExpenseDate(value) {
     const date = new Date(value).toISOString().split("T")[0];
     console.log("date", date);
@@ -249,12 +265,14 @@ export const GlobalProvider = ({ children }) => {
         error: state.error,
         inventoryItem: state.inventoryItem,
         expenseItem: state.expenseItem,
+        locations: state.locations,
         setModalOpen,
         // Inventory action
         getInventoryList,
         editItem,
         setInventoryName,
         setInventoryQuantity,
+        setInventoryLocation,
         saveEditItem,
         deleteInventoryItem,
         inventoryList: state.inventoryList,
@@ -267,6 +285,7 @@ export const GlobalProvider = ({ children }) => {
         setExpensePrice,
         setExpenseQuantity,
         setExpenseDate,
+        setExpenseLocation,
         deleteExpenseItem,
       }}
     >

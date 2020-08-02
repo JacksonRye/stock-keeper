@@ -18,6 +18,10 @@ const ExpenseSchema = new mongoose.Schema({
     type: Date,
     default: new Date().toLocaleDateString(),
   },
+  location: {
+    type: String,
+    required: [true, "Please enter location"]
+  }
 });
 
 module.exports = mongoose.model("Expense", ExpenseSchema);

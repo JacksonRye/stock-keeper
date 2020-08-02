@@ -6,6 +6,7 @@ import { GlobalContext } from "../context/GlobalState";
 import ExpenseGroup from "../components/ExpenseGroup";
 import { groupBy } from "../utils/utils";
 import ExpenseItem from "../components/ExpenseItem";
+import LocationGroup from "../components/LocationGroup";
 
 const Expenses = () => {
   const {
@@ -17,21 +18,21 @@ const Expenses = () => {
     setExpenseName,
     setExpenseQuantity,
     setExpensePrice,
+    setExpenseLocation,
     setExpenseDate,
     deleteExpenseItem,
     saveEditExpenseItem,
+    locations,
   } = useContext(GlobalContext);
-
 
   useEffect(() => {
     console.log("useEffect");
     getExpenses();
   }, []);
 
-
   console.log("expenses", expenses);
 
-  const { name, quantity, price, _id, date } = expenseItem;
+  const { name, quantity, price, _id, date, location } = expenseItem;
 
   const total = expenses.reduce((sum, { total }) => sum + total, 0);
 
@@ -39,7 +40,6 @@ const Expenses = () => {
     <div className="ExpensesView">
       <Header title="Total Expenses" amount={total} />
       <Body>
-
         <div
           onClick={() => setModalOpen(false)}
           className={"dark-background " + (modalOpen ? "show" : "hide")}
@@ -64,6 +64,7 @@ const Expenses = () => {
             <span className="bar"></span>
             <label>Name</label>
           </div>
+
           <div className="group">
             <input
               onChange={(e) => setExpenseQuantity(e.target.value)}
@@ -97,11 +98,32 @@ const Expenses = () => {
             <span className="bar"></span>
             <label>Date</label>
           </div>
+
+          <div className="modal-location">
+            <p>Location</p>
+            <select
+              value={location}
+              onChange={(e) => setExpenseLocation(e.target.value)}
+              id="location"
+            >
+              {locations.map((location, index) => (
+                <option key={index} value={location}>
+                  {location}
+                </option>
+              ))}
+            </select>
+          </div>
         </Modal>
 
         <ul>
-          {expenses.map((expense, index) => (
-            <ExpenseItem key={index} item={expense} />
+          {locations.map((location) => (
+            <LocationGroup location={location}>
+              {expenses
+                .filter((expense) => expense.location === location)
+                .map((expense, index) => (
+                  <ExpenseItem key={index} item={expense} />
+                ))}
+            </LocationGroup>
           ))}
         </ul>
       </Body>

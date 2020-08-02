@@ -22,11 +22,14 @@
   .content {
     //   position: relative;
     //   bottom: 30%;
-      margin: 0 0.8rem 3rem;
-      color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0.8rem 3rem;
+    color: #fff;
 
-      p {
-          margin: 1rem 0;
-      }
+    p {
+      margin: 1rem 0;
+    }
   }
 }

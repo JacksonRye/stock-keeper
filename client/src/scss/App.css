@@ -35,6 +35,15 @@
 }
 
 .Header .content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   margin: 0 0.8rem 3rem;
   color: #fff;
 }
@@ -392,5 +401,37 @@ img {
   left: 0;
   opacity: 0.3;
   z-index: 10;
+}
+
+.LocationGroup .location {
+  margin: 1rem 0 1rem 1rem;
+}
+
+.LocationGroup li {
+  list-style: none;
+}
+
+.modal-location {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.modal-location select {
+  width: 70%;
+  margin: 0 auto 0;
+}
+
+a {
+  border: #fff 2px solid;
+  padding: 1rem;
+  text-decoration: none;
+  color: #fff;
+  background-color: #00ceb4;
+  font-weight: 700;
 }
 /*# sourceMappingURL=App.css.map */

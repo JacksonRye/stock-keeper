@@ -4,6 +4,7 @@ import Body from "../components/Body";
 import { GlobalContext } from "../context/GlobalState";
 import Modal from "../components/Modal";
 import InventoryItem from "../components/InventoryItem";
+import LocationGroup from "../components/LocationGroup";
 
 const Inventory = () => {
   const {
@@ -13,12 +14,14 @@ const Inventory = () => {
     inventoryItem,
     setInventoryName,
     setInventoryQuantity,
+    setInventoryLocation,
     inventoryList,
     deleteInventoryItem,
     getInventoryList,
+    locations,
   } = useContext(GlobalContext);
 
-  const { name, quantity, _id } = inventoryItem;
+  const { name, quantity, _id, location } = inventoryItem;
 
   useEffect(() => {
     getInventoryList();
@@ -64,11 +67,31 @@ const Inventory = () => {
             <span className="bar"></span>
             <label>Quantity</label>
           </div>
+          <div className="modal-location">
+            <p>Location</p>
+            <select
+              value={location}
+              onChange={(e) => setInventoryLocation(e.target.value)}
+              id="location"
+            >
+              {locations.map((location, index) => (
+                <option key={index} value={location}>
+                  {location}
+                </option>
+              ))}
+            </select>
+          </div>
         </Modal>
 
         <ul>
-          {inventoryList.map((item, index) => (
-            <InventoryItem key={index} item={item} />
+          {locations.map((location, index) => (
+            <LocationGroup key={index} location={location}>
+              {inventoryList
+                .filter((item) => item.location === location)
+                .map((item, index) => (
+                  <InventoryItem key={index} item={item} />
+                ))}
+            </LocationGroup>
           ))}
         </ul>
       </Body>

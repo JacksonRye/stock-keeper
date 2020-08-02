@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import hero from "../hero.svg";
 import logo_text from "../logo_text.svg";
 import Menu from "./Menu";
+import GenerateReport from "./GenerateReport";
 
 const Header = ({ title, amount }) => {
   return (
@@ -16,10 +17,16 @@ const Header = ({ title, amount }) => {
         </div>
       </header>
 
-      <div className={"content"}>
-        <p>{title}</p>
+      <div className="content">
+        <div className="info">
+          <p>{title}</p>
 
-        <h3>{amount}</h3>
+          <h3>{amount}</h3>
+        </div>
+
+        <div className="report">
+          <GenerateReport />
+        </div>
       </div>
     </div>
   );

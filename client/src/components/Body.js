@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 
 import { GlobalContext } from "../context/GlobalState";
+import GenerateReport from "./GenerateReport";
 
 const Body = ({ children }) => {
   const { setModalOpen } = useContext(GlobalContext);
@@ -8,6 +9,7 @@ const Body = ({ children }) => {
   return (
     <div className={"Body"}>
       {children}
+
 
       <button onClick={() => setModalOpen(true)} className="add">
         <svg
