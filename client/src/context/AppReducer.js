@@ -14,6 +14,8 @@ export default (state, action) => {
     case "SET_INVENTORY_ITEM":
       return { ...state, inventoryItem: action.payload };
 
+    
+
     // expenses actions
     case "GET_EXPENSES":
       console.log("AR: expenses: ", action.payload);

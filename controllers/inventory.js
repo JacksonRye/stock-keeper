@@ -32,7 +32,7 @@ exports.addInventory = async (req, res, next) => {
       data: inventory,
     });
   } catch (error) {
-    if (err.name === "ValidationError") {
+    if (error.name === "ValidationError") {
       const messages = Object.values(error.errors).map((val) => val.message);
 
       return res.status(400).json({
@@ -42,7 +42,7 @@ exports.addInventory = async (req, res, next) => {
     } else {
       res.send(500).json({
         success: false,
-        error: "Server Error",
+        error: error.message,
       });
     }
   }
@@ -70,7 +70,7 @@ exports.deleteInventory = async (req, res, next) => {
   } catch (err) {
     res.send(500).json({
       success: false,
-      error: "Error deleting inventory",
+      error: err,
     });
   }
 };

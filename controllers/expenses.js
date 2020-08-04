@@ -32,7 +32,7 @@ exports.addExpense = async (req, res, next) => {
       data: expense,
     });
   } catch (error) {
-    if (err.name === "ValidationError") {
+    if (error.name === "ValidationError") {
       const messages = Object.values(error.errors).map((val) => val.message);
 
       return res.status(400).json({

@@ -18,27 +18,29 @@ export class Expense {
   }
 }
 
+const locations = ["Ajip", "Rumokoro"];
+
 const initialState = {
   modalOpen: false,
   menuOpen: false,
   loading: false,
   error: null,
   inventoryItem: {
-    id: null,
+    _id: null,
     name: "",
     quantity: 0,
-    location: "",
+    location: locations[0],
   },
   expenseItem: {
-    id: null,
+    _id: null,
     name: "",
     quantity: 0,
     price: 0,
-    location: "",
+    location: locations[0],
   },
   expenses: [],
   inventoryList: [],
-  locations: ["Ajip", "Rumokoro"],
+  locations,
 };
 
 const expenseUrl = "/api/v1/expenses";
@@ -64,12 +66,15 @@ export const GlobalProvider = ({ children }) => {
         id: null,
         name: "",
         quantity: 0,
+        location: locations[0],
       };
       state.expenseItem = {
         id: null,
         name: "",
         quantity: 0,
         price: 0,
+        location: locations[0],
+
       };
     }
     dispatch({ type: "SET_MODAL", payload });
@@ -88,6 +93,7 @@ export const GlobalProvider = ({ children }) => {
         payload,
       });
     } catch (error) {
+      console.log(error);
       dispatch({
         type: "INVENTORY_ERROR",
         payload: error.message,
@@ -97,25 +103,23 @@ export const GlobalProvider = ({ children }) => {
 
   async function saveEditItem(editItem) {
     console.log("saveEditItem called with: ", editItem);
-    if (editItem._id) {
-      try {
+    try {
+      if (editItem._id) {
+        console.log("edit item", editItem);
+
         await axios.put(`${inventoryUrl}/${editItem._id}`, editItem);
-      } catch (error) {
-        dispatch({
-          type: "INVENTORY_ERROR",
-          payload: error.message,
-        });
-      }
-    } else {
-      try {
+      } else {
+        console.log("save item", editItem);
         await axios.post(`${inventoryUrl}`, editItem, config);
-      } catch (error) {
-        dispatch({
-          type: "INVENTORY_ERROR",
-          payload: error.message,
-        });
       }
+    } catch (error) {
+      console.log("Error at inventortyPost: ", error.response.data.error);
+      dispatch({
+        type: "INVENTORY_ERROR",
+        payload: error.message,
+      });
     }
+
     getInventoryList();
   }
 
@@ -125,6 +129,7 @@ export const GlobalProvider = ({ children }) => {
 
       getInventoryList();
     } catch (error) {
+      console.log(error);
       dispatch({
         type: "INVENTORY_ERROR",
         payload: error.message,
@@ -154,6 +159,7 @@ export const GlobalProvider = ({ children }) => {
     });
   }
   function setInventoryLocation(payload) {
+    console.log("setInventoryLocation", payload);
     dispatch({
       type: "SET_INVENTORY_ITEM",
       payload: { ...state.inventoryItem, location: payload },
@@ -176,6 +182,7 @@ export const GlobalProvider = ({ children }) => {
         payload,
       });
     } catch (error) {
+      console.log(error);
       dispatch({
         type: "EXPENSES_ERROR",
         payload: error.message,
@@ -192,6 +199,7 @@ export const GlobalProvider = ({ children }) => {
       }
       getExpenses();
     } catch (error) {
+      console.log(error);
       dispatch({
         type: "EXPENSES_ERROR",
         payload: error.message,
@@ -204,6 +212,7 @@ export const GlobalProvider = ({ children }) => {
     try {
       await axios.delete(`${expenseUrl}/${id}`);
     } catch (error) {
+      console.log(error);
       dispatch({
         type: "EXPENSES_ERROR",
         payload: error.message,
